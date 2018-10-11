@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "lib": ["es6", "dom"],
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["*"]
+    },
+    "esModuleInterop": true
+  },
+  "exclude": [
+    "node_modules",
+    "static/**",
+    "**/@"
+  ]
+}
