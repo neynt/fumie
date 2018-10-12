@@ -4,6 +4,11 @@
   border: 0;
 }
 
+html, body {
+  height: 100%;
+  min-height: 100%;
+}
+
 .file-upload-label {
   border: 1px solid #888;
   display: inline-block;
@@ -16,6 +21,7 @@ input[type='file'] {
 }
 
 .content {
+  height: 30px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -24,4 +30,12 @@ input[type='file'] {
 
 .tray {
   text-align: center;
+}
+
+.loader {
+  height: 10px;
+  background-color: #9B54A5;
+  border-right: 0px solid #EFEFEF;
+  transition: width 0.1s linear;
+  transition: border-right-width 0.1s linear;
 }

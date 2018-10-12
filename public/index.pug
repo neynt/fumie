@@ -7,10 +7,6 @@ html
     script(src='mithril.min.js')
     title fumie!
   body
-    .content
+    .content#root
       .tray
-        form#file-upload-form(enctype='multipart/form-data' action='/upload' method='post')
-          label.file-upload-label(for='file-upload') Upload an image
-          input#file-upload(type='file' name='image')
-        p Or drag/drop, or paste
     script(src='app.js')
