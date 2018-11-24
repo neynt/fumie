@@ -1,13 +1,14 @@
 declare const m: any;
 
 let progress: number | null = null;
+let dragging: boolean = false;
 let link: string = '';
 
 // Tricky bit here is that different browsers have different ideas of what gets
 // displayed in the browser, and what is downloaded. We probably only want to
 // redirect file types that are near-certain to be displayed in the browser,
 // like images.
-const redirect_extensions = ['png', 'jpg', 'jpeg', 'gif', 'webm'];
+const redirect_extensions = ['png', 'jpg', 'jpeg', 'gif', 'webm', 'txt'];
 
 function upload_file(file: File) {
   const data = new FormData();
@@ -56,8 +57,15 @@ function file_chosen(e: Event) {
 
 window.addEventListener('paste', (e_: Event) => {
   const e = e_ as ClipboardEvent;
-  if (e.clipboardData && e.clipboardData.files) {
+  console.log(e);
+  if (!e.clipboardData) return;
+
+  const pasted_text = e.clipboardData.getData('text');
+
+  if (e.clipboardData.files.length > 0) {
     upload_file((e as ClipboardEvent).clipboardData.files![0]);
+  } else if (pasted_text.length > 0) {
+    upload_file(new File([pasted_text], 'pasted.txt'));
   }
 });
 
@@ -70,13 +78,17 @@ const LoadingBar = {
     }
     const width = 150;
     const filled_width = 150 * progress;
-    const empty_width = width - filled_width;
     return m('.loader', {
       style: {
-        'width': filled_width + 'px',
-        'border-right-width': empty_width + 'px',
+        'width': width + 'px',
       },
-    })
+    }, [
+      m('.loader-fill', {
+        style: {
+          'width': filled_width + 'px',
+        },
+      }),
+    ]);
   }
 };
 
@@ -85,9 +97,7 @@ const App = {
     const children = [];
     if (link) {
       children.push(
-        m('p', [
-          m('a', { href: link }, link),
-        ])
+        m('p', link)
       );
     } else if (progress !== null) {
       children.push(m(LoadingBar));
@@ -101,13 +111,18 @@ const App = {
           m('label', {
             class: 'file-upload-label',
             for: 'file-upload',
-          }, 'Upload a file'),
+          }, 'Upload'),
           m('input', {
             id: 'file-upload',
             onchange: file_chosen,
             type: 'file',
             name: 'image',
           }),
+          m('p', [
+            'or drag and drop',
+            m('br'),
+            'or paste',
+          ]),
         ])
       );
     }

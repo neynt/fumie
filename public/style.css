@@ -9,11 +9,23 @@ html, body {
   min-height: 100%;
 }
 
+body, input, label {
+  font-family: monospace;
+  font-size: 12pt;
+}
+
+p {
+  padding: 15px 10px;
+  color: #aaa;
+}
+
 .file-upload-label {
   border: 1px solid #888;
   display: inline-block;
-  padding: 6px 12px;
+  padding: 10px 25px;
   cursor: pointer;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 input[type='file'] {
@@ -21,7 +33,7 @@ input[type='file'] {
 }
 
 .content {
-  height: 30px;
+  height: 100px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -33,9 +45,13 @@ input[type='file'] {
 }
 
 .loader {
-  height: 10px;
-  background-color: #9B54A5;
-  border-right: 0px solid #EFEFEF;
+  height: 20px;
+  border-radius: 3px;
+  border: 1px solid black;
+}
+
+.loader-fill {
+  height: 20px;
+  background-color: #ccc;
   transition: width 0.1s linear;
-  transition: border-right-width 0.1s linear;
 }
