@@ -15,6 +15,10 @@ server.listen(8080, () => {
 });
 
 app.post('/upload', upload.single('image'), (req, res, next) => {
+  if (!req.file) {
+    console.log('no file uploaded');
+    res.send('no file uploaded');
+  }
   const child = child_process.execFile(
     'python3',
     ['fumie.py', req.file.path, path.extname(req.file.originalname) || '.txt', '/home/neynt/i.neynt.ca/'],
