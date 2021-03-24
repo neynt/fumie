@@ -3,3 +3,5 @@
 /node_modules
 /pretend_nginx
 Session.vim
+stderr.log
+stdout.log

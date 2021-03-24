@@ -63,7 +63,7 @@ window.addEventListener('paste', (e_: Event) => {
   const pasted_text = e.clipboardData.getData('text');
 
   if (e.clipboardData.files.length > 0) {
-    upload_file((e as ClipboardEvent).clipboardData.files![0]);
+    upload_file((e as ClipboardEvent).clipboardData!.files![0]);
   } else if (pasted_text.length > 0) {
     upload_file(new File([pasted_text], 'pasted.txt'));
   }
