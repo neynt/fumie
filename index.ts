@@ -3,17 +3,15 @@ import http from 'http';
 import multer from 'multer';
 import child_process from 'child_process';
 import path from 'path';
+import config from './config';
 
 const app = express();
 const server = new http.Server(app);
-const port = 8090;
-const base_url = 'https://i.neynt.ca/'
 const upload = multer({ dest: '/tmp/fumie-uploads/' });
-const file_root = '/blk/neynt/i.neynt.ca/'
 
 app.use(express.static('public'))
-server.listen(port, () => {
-  console.log(`Listening on :${port}`);
+server.listen(config.port, () => {
+  console.log(`Listening on :${config.port}`);
 });
 
 function spawn(command: string, args: string[]): Promise<any> {
@@ -38,16 +36,26 @@ function spawn(command: string, args: string[]): Promise<any> {
 
 app.post('/upload', upload.single('file'), async (req, res, _next) => {
   if (!req.file) {
-    console.log('nothing uploaded');
     res.send('nothing uploaded');
+    return;
+  }
+  const origin = req.headers.origin;
+  if (!origin) {
+    res.send('where are you from?');
+    return;
+  }
+  if (!config.allowed_origins.has(origin)) {
+    res.send('idk');
     return;
   }
   const tmp_file = req.file.path;
   const ext = path.extname(req.file.originalname) || '.txt';
   const hash = (await spawn('sha256sum', [tmp_file])).split(/(\s+)/)[0];
-  const dest_file = file_root + hash + ext;
+  const dest_file = config.file_root + hash + ext;
   console.log(req.headers);
   console.log(`${req.file.originalname} uploaded to ${dest_file}`);
   await spawn('mv', [tmp_file, dest_file]);
-  res.send(`${base_url}${hash}${ext}`);
+  res.setHeader('Access-Control-Allow-Origin', origin);
+  res.setHeader('Vary', 'Origin');
+  res.send(`${config.base_url}${hash}${ext}`);
 });
