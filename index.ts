@@ -58,14 +58,19 @@ app.post('/upload', upload.single('file'), async (req, res, _next) => {
     res.send('where are you from?');
     return;
   }
-  if (!config.allowed_origins.has(origin)) {
-    res.send('idk');
+  if (!config.allowed_origins.hasOwnProperty(origin)) {
+    res.send('where are you really from?');
+    return;
+  }
+  const origin_config = config.allowed_origins[origin];
+  if (req.file.size > origin_config.max_size) {
+    res.send("it's too big!");
     return;
   }
   const tmp_file = req.file.path;
   const ext = path.extname(req.file.originalname) || '.txt';
   const hash = (await spawn('sha256sum', [tmp_file])).split(/(\s+)/)[0];
-  const dest_file = config.file_root + hash;
+  const dest_file = origin_config.file_root + hash;
   log('uploaded-file', {
     original_name: req.file.originalname,
     dest: dest_file,
@@ -73,5 +78,5 @@ app.post('/upload', upload.single('file'), async (req, res, _next) => {
   await spawn('mv', [tmp_file, dest_file]);
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Vary', 'Origin');
-  res.send(`${config.base_url}${hash}${ext}`);
+  res.send(`${origin_config.base_url}${hash}${ext}`);
 });
