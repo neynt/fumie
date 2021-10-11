@@ -9,9 +9,19 @@ const app = express();
 const server = new http.Server(app);
 const upload = multer({ dest: '/tmp/fumie-uploads/' });
 
+function log(kind: string, details: {[key: string]: any}) {
+  console.log({
+    time: new Date(),
+    kind,
+    ...details,
+  });
+}
+
 app.use(express.static('public'))
 server.listen(config.port, () => {
-  console.log(`Listening on :${config.port}`);
+  log('listening', {
+    port: config.port,
+  });
 });
 
 function spawn(command: string, args: string[]): Promise<any> {
@@ -35,6 +45,10 @@ function spawn(command: string, args: string[]): Promise<any> {
 }
 
 app.post('/upload', upload.single('file'), async (req, res, _next) => {
+  log('got-request', {
+    ip: req.ip,
+    headers: req.headers,
+  });
   if (!req.file) {
     res.send('nothing uploaded');
     return;
@@ -52,8 +66,10 @@ app.post('/upload', upload.single('file'), async (req, res, _next) => {
   const ext = path.extname(req.file.originalname) || '.txt';
   const hash = (await spawn('sha256sum', [tmp_file])).split(/(\s+)/)[0];
   const dest_file = config.file_root + hash;
-  console.log(req.headers);
-  console.log(`${req.file.originalname} uploaded to ${dest_file}`);
+  log('uploaded-file', {
+    original_name: req.file.originalname,
+    dest: dest_file,
+  });
   await spawn('mv', [tmp_file, dest_file]);
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Vary', 'Origin');
