@@ -51,7 +51,7 @@ app.post('/upload', upload.single('file'), async (req, res, _next) => {
   const tmp_file = req.file.path;
   const ext = path.extname(req.file.originalname) || '.txt';
   const hash = (await spawn('sha256sum', [tmp_file])).split(/(\s+)/)[0];
-  const dest_file = config.file_root + hash + ext;
+  const dest_file = config.file_root + hash;
   console.log(req.headers);
   console.log(`${req.file.originalname} uploaded to ${dest_file}`);
   await spawn('mv', [tmp_file, dest_file]);
