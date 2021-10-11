@@ -4,6 +4,7 @@
     "module": "commonjs",
     "lib": ["es6", "dom"],
     "strict": true,
+    "skipLibCheck": true,
     "baseUrl": "./",
     "paths": {
       "@/*": ["*"]

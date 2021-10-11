@@ -12,7 +12,7 @@ const redirect_extensions = ['png', 'jpg', 'jpeg', 'gif', 'webm', 'txt'];
 
 function upload_file(file: File) {
   const data = new FormData();
-  data.append('image', file);
+  data.append('file', file);
   m.request({
     method: 'POST',
     url: '/upload',
@@ -111,12 +111,12 @@ const App = {
           m('label', {
             class: 'file-upload-label',
             for: 'file-upload',
-          }, 'Upload'),
+          }, 'Select file'),
           m('input', {
             id: 'file-upload',
             onchange: file_chosen,
             type: 'file',
-            name: 'image',
+            name: 'file',
           }),
           m('p', [
             'or drag and drop',

@@ -36,15 +36,17 @@ function spawn(command: string, args: string[]): Promise<any> {
   });
 }
 
-app.post('/upload', upload.single('image'), async (req, res, _next) => {
+app.post('/upload', upload.single('file'), async (req, res, _next) => {
   if (!req.file) {
-    console.log('no file uploaded');
-    res.send('no file uploaded');
+    console.log('nothing uploaded');
+    res.send('nothing uploaded');
+    return;
   }
   const tmp_file = req.file.path;
   const ext = path.extname(req.file.originalname) || '.txt';
   const hash = (await spawn('sha256sum', [tmp_file])).split(/(\s+)/)[0];
   const dest_file = file_root + hash + ext;
+  console.log(req.headers);
   console.log(`${req.file.originalname} uploaded to ${dest_file}`);
   await spawn('mv', [tmp_file, dest_file]);
   res.send(`${base_url}${hash}${ext}`);

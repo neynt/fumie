@@ -2,6 +2,8 @@
 # Runs server. Recompiles server and frontend on code change.
 set -e
 
+trap "trap - SIGTERM && kill -- -$$" SIGINT SIGTERM EXIT
+
 while true; do
   make public/index.html &
   make public/app.js &

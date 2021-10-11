@@ -9,13 +9,13 @@
   "author": "",
   "license": "UNLICENSED",
   "devDependencies": {
-    "@types/express": "^4.17.11",
-    "@types/mithril": "^2.0.6",
-    "@types/node": "^14.14.35"
+    "@types/express": "^4.17.13",
+    "@types/mithril": "^2.0.8",
+    "@types/node": "^16.10.3"
   },
   "dependencies": {
-    "@types/multer": "^1.4.5",
+    "@types/multer": "^1.4.7",
     "express": "^4.17.1",
-    "multer": "^1.4.2"
+    "multer": "^1.4.3"
   }
 }
