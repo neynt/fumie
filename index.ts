@@ -6,13 +6,14 @@ import path from 'path';
 
 const app = express();
 const server = new http.Server(app);
+const port = 8090;
 const base_url = 'https://i.neynt.ca/'
 const upload = multer({ dest: '/tmp/fumie-uploads/' });
 const file_root = '/blk/neynt/i.neynt.ca/'
 
 app.use(express.static('public'))
-server.listen(8080, () => {
-  console.log('Listening on :8080');
+server.listen(port, () => {
+  console.log(`Listening on :${port}`);
 });
 
 function spawn(command: string, args: string[]): Promise<any> {
